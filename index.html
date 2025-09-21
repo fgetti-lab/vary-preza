@@ -1,1 +1,44 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Варин Неоновый Забег</title>
+    <!-- Подключаем специальный шрифт для неонового стиля -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Главный контейнер, в котором будет вся игра -->
+    <div id="game-container">
 
+        <!-- Интерфейс пользователя (счёт) -->
+        <div id="ui">
+            <div>СЧЁТ: <span id="score">0</span></div>
+        </div>
+
+        <!-- Сам игровой мир, где появляются объекты -->
+        <div id="game-world">
+            <div id="player"></div>
+        </div>
+
+        <!-- Экран проигрыша (изначально скрыт) -->
+        <div id="game-over-screen" class="hidden">
+            <h2>Конец забега!</h2>
+            <p>Твой неоновый счёт: <span id="final-score">0</span></p>
+            <p>Варя, ты супер! Готова зажечь снова?</p>
+            <button id="restart-button">Ещё раз!</button>
+        </div>
+
+         <!-- Стартовый экран (виден в начале) -->
+         <div id="start-screen">
+            <h2>Варин Неоновый Забег</h2>
+            <p>Управляй стрелками клавиатуры (← → ↑ ↓), чтобы двигаться, прыгать и скользить.</p>
+            <button id="start-button">Начать!</button>
+        </div>
+    </div>
+
+    <!-- Подключаем скрипт в самом конце, чтобы он сработал после загрузки всей страницы -->
+    <script src="script.js"></script>
+</body>
+</html>
