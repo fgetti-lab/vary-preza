@@ -11,13 +11,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Настройки
     const lanes = [-100, 0, 100]; // Смещение для левой, центральной, правой полосы
-    const gameSpeedStart = 5;
-    const speedMultiplier = 1.0001;
+    let gameSpeed = 6;
     
     // Состояние игры
-    let currentLane = 1; // 0, 1, 2
+    let currentLane = 1;
     let score = 0;
-    let gameSpeed = gameSpeedStart;
     let isJumping = false;
     let isSliding = false;
     let isGameRunning = false;
@@ -52,7 +50,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isJumping || isSliding) return;
         isJumping = true;
         player.classList.add('jumping');
-        // Вернуть на место после прыжка
         setTimeout(() => {
             isJumping = false;
             player.classList.remove('jumping');
@@ -63,7 +60,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isJumping || isSliding) return;
         isSliding = true;
         player.classList.add('sliding');
-        // Вернуть в норму после подката
         setTimeout(() => {
             isSliding = false;
             player.classList.remove('sliding');
@@ -78,60 +74,48 @@ document.addEventListener('DOMContentLoaded', () => {
         const objectType = Math.random();
         const lane = Math.floor(Math.random() * 3);
 
-        if (objectType < 0.2) { // 20% шанс создать бонус
+        if (objectType < 0.2) { 
             div.classList.add('coin');
             div.dataset.type = 'coin';
-        } else if (objectType < 0.6) { // 40% шанс - низкое препятствие
+        } else if (objectType < 0.6) {
             div.classList.add('obstacle-low');
             div.dataset.type = 'obstacle-low';
-        } else { // 40% шанс - высокое препятствие
+        } else { 
             div.classList.add('obstacle-high');
             div.dataset.type = 'obstacle-high';
         }
         
         div.style.left = `calc(50% + ${lanes[lane]}px)`;
-        div.style.bottom = '100%'; // Появляется сверху
+        div.style.top = '-50px'; // Появляется сверху
         gameWorld.appendChild(div);
     }
     
     function moveObjects() {
         document.querySelectorAll('.game-object').forEach(obj => {
-            let currentBottom = parseFloat(obj.style.bottom);
-            currentBottom -= gameSpeed;
-            obj.style.bottom = currentBottom + '%';
+            let currentTop = parseFloat(obj.style.top);
+            currentTop += gameSpeed;
+            obj.style.top = currentTop + 'px';
 
-            // Удаляем объект, если он ушел за экран
-            if (currentBottom < -20) {
-                obj.remove();
-            }
-
-            // Проверка столкновений
+            if (currentTop > 600) { obj.remove(); }
             checkCollision(obj);
         });
-        gameSpeed *= speedMultiplier; // Постепенно увеличиваем скорость
     }
 
     // --- 4. ПРОВЕРКА СТОЛКНОВЕНИЙ ---
     function checkCollision(obj) {
         const objRect = obj.getBoundingClientRect();
         const playerRect = player.getBoundingClientRect();
-
-        // Проверяем, на одной ли линии игрок и объект
-        const horizontalMatch = Math.abs(playerRect.x - objRect.x) < 30;
-
-        if (horizontalMatch) {
-            const verticalMatch = playerRect.top < objRect.bottom && playerRect.bottom > objRect.top;
+        if (objRect.left < playerRect.right && objRect.right > playerRect.left &&
+            objRect.top < playerRect.bottom && objRect.bottom > playerRect.top) {
             
-            if (verticalMatch) {
-                if (obj.dataset.type === 'coin') {
-                    score += 10;
-                    scoreElement.innerText = score;
-                    obj.remove();
-                } else if (obj.dataset.type === 'obstacle-low' && !isJumping) {
-                    endGame();
-                } else if (obj.dataset.type === 'obstacle-high' && !isSliding) {
-                    endGame();
-                }
+            if (obj.dataset.type === 'coin') {
+                score += 10;
+                scoreElement.innerText = score;
+                obj.remove();
+            } else if (obj.dataset.type === 'obstacle-low' && !isJumping) {
+                endGame();
+            } else if (obj.dataset.type === 'obstacle-high' && !isSliding) {
+                endGame();
             }
         }
     }
@@ -144,23 +128,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     function startGame() {
-        // Сброс всех значений
-        currentLane = 1;
-        score = 0;
-        gameSpeed = gameSpeedStart;
-        isGameRunning = true;
-        
-        // Очистка мира
+        currentLane = 1; score = 0; gameSpeed = 6; isGameRunning = true;
         gameWorld.querySelectorAll('.game-object').forEach(o => o.remove());
-
-        // Скрыть экраны
         startScreen.classList.add('hidden');
         gameOverScreen.classList.add('hidden');
 
-        // Запуск циклов
         updatePlayerPosition();
         gameLoopInterval = setInterval(gameLoop, 16); // ~60 FPS
-        obstacleInterval = setInterval(createObject, 1500 / (gameSpeed / gameSpeedStart));
+        obstacleInterval = setInterval(createObject, 900);
         
         document.addEventListener('keydown', handleKeyPress);
     }
@@ -175,7 +150,6 @@ document.addEventListener('DOMContentLoaded', () => {
         gameOverScreen.classList.remove('hidden');
     }
 
-    // Назначаем события кнопкам
     startButton.addEventListener('click', startGame);
     restartButton.addEventListener('click', startGame);
 });
