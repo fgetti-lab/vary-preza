@@ -1,145 +1,61 @@
-/* --- ОБЩИЕ СТИЛИ И ФОН --- */
 body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-    font-family: 'Roboto Mono', monospace; /* Используем наш красивый шрифт */
-    background-color: #1a1a2e; /* Глубокий тёмно-синий фон */
-    color: #ffffff;
+    display: flex; justify-content: center; align-items: center;
+    height: 100vh; margin: 0;
+    font-family: 'Roboto Mono', monospace;
+    background-color: #1a1a2e; color: #ffffff;
 }
-
-/* --- КОНТЕЙНЕР ИГРЫ --- */
 #game-container {
-    width: 400px;
-    height: 600px;
-    position: relative;
-    overflow: hidden;
+    width: 400px; height: 600px;
+    position: relative; overflow: hidden;
     background-color: #1a1a2e;
     border: 3px solid #00ffff;
-    box-shadow: 0 0 20px #00ffff; /* Неоновое свечение рамки */
+    box-shadow: 0 0 20px #00ffff;
     border-radius: 10px;
 }
-
 #game-world {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    /* Анимированные линии дороги для эффекта движения */
-    background: repeating-linear-gradient(
-        #1a1a2e,
-        #1a1a2e 48px,
-        #3498db 49px,
-        #1a1a2e 50px
-    );
+    position: relative; width: 100%; height: 100%;
+    background: repeating-linear-gradient(#1a1a2e, #1a1a2e 48px, #3498db 49px, #1a1a2e 50px);
     animation: moveTrack 0.5s linear infinite;
 }
+@keyframes moveTrack { from { background-position-y: 0; } to { background-position-y: 50px; } }
 
-@keyframes moveTrack {
-    from { background-position-y: 0; }
-    to { background-position-y: 50px; }
-}
-
-/* --- ИГРОК (НАРИСОВАННЫЙ КОДОМ) --- */
 #player {
-    width: 40px;
-    height: 40px;
-    /* !!!!!!!! ЗАМЕНИ ЭТОТ ЦВЕТ НА ЛЮБИМЫЙ ЦВЕТ ВАРИ !!!!!!!!! */
-    background-color: #ff69b4; /* Ярко-розовый - можешь поменять */
-    box-shadow: 0 0 15px #ff69b4, 0 0 25px #ff69b4; /* Эффект свечения */
-    
-    border-radius: 50%; /* Делаем из квадрата круг */
-    position: absolute;
-    bottom: 50px;
-    left: 50%;
+    width: 40px; height: 40px;
+    /* !!!!!!!! ЗАМЕНИ ЦВЕТ НА ЛЮБИМЫЙ ЦВЕТ ВАРИ !!!!!!!!! */
+    background-color: #ff69b4;
+    box-shadow: 0 0 15px #ff69b4, 0 0 25px #ff69b4;
+    border-radius: 50%;
+    position: absolute; bottom: 50px; left: 50%;
     transform: translateX(-50%);
     transition: left 0.2s ease-out, bottom 0.3s ease-out, transform 0.3s ease-out;
     z-index: 100;
 }
+.jumping { bottom: 180px !important; transform: translateX(-50%) rotate(180deg) !important; }
+.sliding { transform: translateX(-50%) scaleY(0.4) !important; bottom: 40px !important; }
 
-/* Анимации игрока */
-.jumping {
-    bottom: 180px !important;
-    transform: translateX(-50%) rotate(180deg) !important;
-}
-.sliding {
-    transform: translateX(-50%) scaleY(0.4) !important; /* Сплющивание при подкате */
-}
-
-/* --- ОБЪЕКТЫ (ПРЕПЯТСТВИЯ И БОНУСЫ) --- */
 .game-object {
-    position: absolute;
-    transform: translateX(-50%);
-    bottom: 650px; /* Появляются сверху за экраном */
-    z-index: 50;
-    border-radius: 5px;
+    position: absolute; transform: translateX(-50%);
+    top: -50px; /* Появляются сверху за экраном */
+    z-index: 50; border-radius: 5px;
 }
+.obstacle-low { width: 70px; height: 20px; background-color: #f1c40f; box-shadow: 0 0 15px #f1c40f; }
+.obstacle-high { width: 150px; height: 20px; top: -150px; background-color: #e74c3c; box-shadow: 0 0 15px #e74c3c; }
+.coin { width: 25px; height: 25px; background-color: #00ffff; box-shadow: 0 0 15px #00ffff; border-radius: 50%; z-index: 200; }
 
-.obstacle-low {
-    width: 70px;
-    height: 20px;
-    background-color: #f1c40f; /* Неоновый желтый */
-    box-shadow: 0 0 15px #f1c40f;
-}
-
-.obstacle-high {
-    width: 150px;
-    height: 20px;
-    background-color: #e74c3c; /* Неоновый красный */
-    box-shadow: 0 0 15px #e74c3c;
-}
-
-.coin {
-    width: 25px;
-    height: 25px;
-    background-color: #00ffff; /* Неоновый голубой */
-    box-shadow: 0 0 15px #00ffff;
-    border-radius: 50%;
-    z-index: 200;
-}
-
-/* --- ИНТЕРФЕЙС И ЭКРАНЫ --- */
-#ui {
-    position: absolute;
-    top: 20px;
-    width: 100%;
-    text-align: center;
-    z-index: 1000;
-    font-size: 24px;
-    text-shadow: 0 0 10px #ffffff;
-}
-
+#ui { position: absolute; top: 20px; width: 100%; text-align: center; z-index: 1000; font-size: 24px; text-shadow: 0 0 10px #ffffff; }
 .hidden { display: none !important; }
 
 #start-screen, #game-over-screen {
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
     background-color: rgba(26, 26, 46, 0.9);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 20px;
-    z-index: 2000;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    text-align: center; padding: 20px; z-index: 2000;
 }
 #start-screen h2, #game-over-screen h2 { font-size: 32px; }
-
-#start-screen button, #game-over-screen button {
-    padding: 15px 30px;
-    font-size: 20px;
-    border-radius: 10px;
-    border: 2px solid #00ffff;
-    cursor: pointer;
-    margin-top: 20px;
-    background-color: transparent;
-    color: #00ffff;
-    text-shadow: 0 0 10px #00ffff;
+button {
+    padding: 15px 30px; font-size: 20px; font-family: 'Roboto Mono', monospace;
+    border-radius: 10px; border: 2px solid #00ffff; cursor: pointer; margin-top: 20px;
+    background-color: transparent; color: #00ffff; text-shadow: 0 0 10px #00ffff;
     transition: background-color 0.3s, color 0.3s;
 }
-
-#start-screen button:hover, #game-over-screen button:hover {
-    background-color: #00ffff;
-    color: #1a1a2e;
-}
+button:hover { background-color: #00ffff; color: #1a1a2e; }
