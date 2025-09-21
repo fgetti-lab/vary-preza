@@ -3,20 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Варин Забег!</title>
+    <title>Приключения Вари!</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Варин Забег!</h1>
-    <div id="game">
-        <!-- Персонаж, которым управляет Варя -->
-        <div id="character"></div>
-        <!-- Препятствие -->
-        <div id="obstacle"></div>
+    <div id="game-container">
+        <div id="ui">
+            <div id="score-container">Счёт: <span id="score">0</span></div>
+        </div>
+        <div id="game-world">
+            <div id="track"></div>
+            <div id="player"></div>
+        </div>
+        <div id="game-over-screen" class="hidden">
+            <h2>Игра окончена!</h2>
+            <p>Твой финальный счёт: <span id="final-score">0</span></p>
+            <p>Молодец, Варя! Попробуешь побить свой рекорд?</p>
+            <button id="restart-button">Начать заново</button>
+        </div>
+         <div id="start-screen">
+            <h2>Готова к приключениям, Варя?</h2>
+            <p>Управляй стрелками на клавиатуре (← → ↑ ↓)</p>
+            <button id="start-button">Начать игру!</button>
+        </div>
     </div>
-    <div id="score-container">Счёт: <span id="score">0</span></div>
-    <div id="instructions">Нажми любую клавишу или коснись экрана, чтобы прыгнуть!</div>
-
     <script src="script.js"></script>
 </body>
 </html>
